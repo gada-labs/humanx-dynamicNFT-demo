@@ -1,0 +1,11 @@
+.DS_Store
+.thumbs.db
+
+# Dependency directories
+node_modules/
+
+# Environment variables (dotenv)
+.env
+
+# Vercel CLI config
+.vercel
