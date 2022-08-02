@@ -6,6 +6,7 @@
   "__main": "index.ts",
   "private": true,
   "scripts": {
+    "build": "ts-node src/run-on-build.ts",
     "test1": "ts-node src/test1.ts"
   },
   "devDependencies": {
