@@ -7,10 +7,10 @@ import * as bs58 from 'bs58';
 
 export default abstract class Solana {
 
-  private static readonly HUMANX_AUTHORITY_PUBLIC_KEY = 'cr3MDcyGai6gkCmrRSX3atoaAqRW8pMAFCa25WfoZry';
-  private static readonly HUMANX_AUTHORITY_PRIVATE_KEY = '3nBp3EYhRQmcaCNzXjYd416Y9SBg88KHWHYF8wugaf7MjEnGKw2p59teasxhJyAPZ2oidQEnRKbELbbNKmt4Vrjj';
-  private static readonly HUMANX_ROYALTY_PUBLIC_KEY = 'cr3nrTZYDWTjTGv9bY1LoGm9Er4uwW4FD4SDBoLdcqX';
-  private static readonly HUMANX_ROYALTY_PRIVATE_KEY = '4nP8HqLYiPDKivxftF4mRaNomc8uNv7TukMKMmUV6WEcXEUSpUEMEMwL9pZgsv6mdDVSxf3B1fCLiW9mhkXU7Ss3';
+  private static readonly HUMANX_AUTHORITY_PUBLIC_KEY = process.env.HUMANX_AUTHORITY_PUBLIC_KEY!;
+  private static readonly HUMANX_AUTHORITY_PRIVATE_KEY = process.env.HUMANX_AUTHORITY_PRIVATE_KEY!;
+  private static readonly HUMANX_ROYALTY_PUBLIC_KEY = process.env.HUMANX_ROYALTY_PUBLIC_KEY!;
+  private static readonly HUMANX_ROYALTY_PRIVATE_KEY = process.env.HUMANX_ROYALTY_PRIVATE_KEY!;
 
   // Private functions
 
@@ -33,9 +33,6 @@ export default abstract class Solana {
     console.log(new Date().toISOString(), `HUMANX Solana __checkConnection() Connecting to endpoint ${endpoint}`);
     const solanaNodeVersion = (await connection.getVersion())['solana-core'];
     console.log(new Date().toISOString(), `HUMANX Solana __checkConnection() Connected to endpoint ${endpoint} ${solanaNodeVersion}`);
-
-    this.__fundHumanX('devnet').then(() => { }, () => { });
-    this.__fundHumanX('testnet').then(() => { }, () => { });
   }
 
   private static async __fundHumanX(cluster: solana.Cluster) {
@@ -53,9 +50,20 @@ export default abstract class Solana {
 
   // Public functions
 
-  public static async mintNft(metadata: any, metadataUri: (metadata: string) => Promise<string>) {
+  public static async init() {
+    if (this.HUMANX_AUTHORITY_PUBLIC_KEY === undefined || this.HUMANX_AUTHORITY_PRIVATE_KEY === undefined) {
+      throw new Error('HUMANX Solana init() HUMANX_AUTHORITY_PUBLIC_KEY and HUMANX_AUTHORITY_PRIVATE_KEY must be set in .env or env vars.');
+    }
+    if (this.HUMANX_ROYALTY_PUBLIC_KEY === undefined || this.HUMANX_ROYALTY_PRIVATE_KEY === undefined) {
+      throw new Error('HUMANX Solana init() HUMANX_ROYALTY_PUBLIC_KEY and HUMANX_ROYALTY_PRIVATE_KEY must be set in .env or env vars.');
+    }
 
-    this.__checkConnection();
+    await this.__checkConnection();
+    await this.__fundHumanX('devnet');
+    await this.__fundHumanX('testnet');
+  }
+
+  public static async mintNft(metadata: any, metadataUri: (metadata: string) => Promise<string>) {
 
     /* eslint-disable @typescript-eslint/naming-convention */
     // const metadata = {
