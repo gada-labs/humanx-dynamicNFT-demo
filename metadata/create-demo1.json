@@ -2,7 +2,7 @@
   "name": "HUMANX DYNAMIC NFT DEMO 1",
   "symbol": "HUMANX",
   "description": "Making NFTs fun again",
-  "image": "__AUTOMATIC__",
+  "image": "https://raw.githubusercontent.com/gada-labs/humanx-dynamicNFT/main/metadata/img/demo1-age1.png",
   "external_url": "https://twitter.com/humanx_NFT",
   "attributes": [
     {
