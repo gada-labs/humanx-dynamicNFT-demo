@@ -35,12 +35,12 @@ export default abstract class Solana {
     console.log(new Date().toISOString(), `HUMANX Solana __checkConnection() Connected to endpoint ${endpoint} ${solanaNodeVersion}`);
   }
 
-  private static async __fundHumanX(cluster: solana.Cluster) {
+  private static async __fundHumanX() {
 
     console.log(new Date().toISOString(), `HUMANX Solana __fundHumanX() Funding HUMANX authority wallet...`);
     const signature = await this.connection().requestAirdrop(
       new PublicKey(this.HUMANX_AUTHORITY_PUBLIC_KEY),
-      solana.LAMPORTS_PER_SOL * 100
+      solana.LAMPORTS_PER_SOL * 1
     );
 
     console.log(new Date().toISOString(), `HUMANX Solana __fundHumanX() Requested airdrop with signature ${signature}`);
@@ -59,8 +59,7 @@ export default abstract class Solana {
     }
 
     await this.__checkConnection();
-    await this.__fundHumanX('devnet');
-    await this.__fundHumanX('testnet');
+    await this.__fundHumanX();
   }
 
   public static async mintNft(metadata: any, metadataUri: (metadata: string) => Promise<string>) {
