@@ -37,15 +37,15 @@ export default abstract class Solana {
 
   private static async __fundHumanX(cluster: solana.Cluster) {
 
-    console.log(new Date().toISOString(), `HUMANX Solana __fundGada() Funding GADA authority wallet...`);
+    console.log(new Date().toISOString(), `HUMANX Solana __fundHumanX() Funding HUMANX authority wallet...`);
     const signature = await this.connection().requestAirdrop(
       new PublicKey(this.HUMANX_AUTHORITY_PUBLIC_KEY),
       solana.LAMPORTS_PER_SOL * 100
     );
 
-    console.log(new Date().toISOString(), `HUMANX Solana __fundGada() Requested airdrop with signature ${signature}`);
+    console.log(new Date().toISOString(), `HUMANX Solana __fundHumanX() Requested airdrop with signature ${signature}`);
     await this.connection().confirmTransaction(signature);
-    console.log(new Date().toISOString(), `HUMANX Solana __fundGada() Confirmed airdrop with signature ${signature}`);
+    console.log(new Date().toISOString(), `HUMANX Solana __fundHumanX() Confirmed airdrop with signature ${signature}`);
   }
 
   // Public functions
