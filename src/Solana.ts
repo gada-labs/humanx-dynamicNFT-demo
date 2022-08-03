@@ -62,33 +62,12 @@ export default abstract class Solana {
     await this.__fundHumanX();
   }
 
-  public static async mintNft(metadata: any, metadataUri: (metadata: string) => Promise<string>) {
-
-    /* eslint-disable @typescript-eslint/naming-convention */
-    // const metadata = {
-    //   'name': utility.name,
-    //   'symbol': 'GADA',
-    //   'description': utility.description,
-    //   'image': utility.imageURL,
-    //   //'animation_url': '',
-    //   'external_url': 'https://www.gadalabs.com',
-    //   'attributes': [
-    //     {
-    //       'trait_type': 'Provider',
-    //       'value': 'GADA'
-    //     }
-    //   ]
-    // };
-    //TODO compare output with: https://solscan.io/token/2QgaD4KhUmC8pKegmadFB4pQJ7BgrC5xWUsnnB6iCJq7#metadata, which for example shows as (MASTER EDITION), and has on chain metadata like editionNonce int 254, collection with verified info and edition with maxSuppy and supply props
-    /* eslint-enable @typescript-eslint/naming-convention */
-    const metadataString = JSON.stringify(metadata);
-    const _metadataUri = await metadataUri(metadataString);
-
+  public static async mintNft(metadata: any, metadataUri: string) {
     console.log(new Date().toISOString(), 'HUMANX Solana mintNft(): Minting NFT...');
     const metaplex = new metaplexNs.Metaplex(this.connection());
     metaplex.use(metaplexNs.keypairIdentity(Keypair.fromSecretKey(bs58.decode(this.HUMANX_AUTHORITY_PRIVATE_KEY))));
     const task = metaplex.nfts().create({
-      uri: _metadataUri, // Off-chain JSON data
+      uri: metadataUri, // Off-chain JSON data
       name: metadata.name, // On-chain, duplicated in the off-chain JSON data
       sellerFeeBasisPoints: 500, // On-chain only
       symbol: metadata.symbol, // On-chain, duplicated in the off-chain JSON data
@@ -110,7 +89,7 @@ export default abstract class Solana {
       uses: null // Default is null
     });
     task.onStatusChange((status) => {
-      console.log(new Date().toISOString(), 'HUMANX: Minting status change:');
+      console.log(new Date().toISOString(), 'HUMANX Solana mintNft(): Minting status change:');
       console.log(status);
     });
     const output = await task.run();
