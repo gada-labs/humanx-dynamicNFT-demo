@@ -1,5 +1,9 @@
 import 'dotenv/config';
-import createDemo1 from '../metadata/create-demo1';
+
+const createMetadataFiles = [
+  '../metadata/create-demo1.json',
+];
+
 import Solana from './Solana';
 
 
@@ -7,23 +11,25 @@ import Solana from './Solana';
 
   console.log(new Date().toISOString(), 'HUMANX: Running run-all.ts ops...');
 
-  await Solana.init();
+  //await Solana.init();
   
   console.log(new Date().toISOString(), 'HUMANX: Loading create metadatas...');
   
-  const metadatas = [];
-  metadatas.push(createDemo1);
+  const createMetadatas = [];
+  for (const createMetadataFile of createMetadataFiles) {
+    createMetadatas.push(await import(createMetadataFile));
+  }
   
   console.log(new Date().toISOString(), 'HUMANX: Finished loading create metadatas.');
   
   console.log(new Date().toISOString(), 'HUMANX: Running create ops...');
   
-  for (let i = 0; i < metadatas.length; i++) {
+  for (let i = 0; i < createMetadatas.length; i++) {
     console.log(new Date().toISOString(), `HUMANX: Running create op ${i}...`);
   
-    const metadata = metadatas[i];
+    const metadata = createMetadatas[i];
   
-    await Solana.mintNft(metadata, metadataUri());
+    await Solana.mintNft(metadata, createMetadataFiles[i].replace('..', 'https://raw.githubusercontent.com/gada-labs/humanx-dynamicNFT/main'));
   
     console.log(new Date().toISOString(), `HUMANX: Finished running create op ${i}.`);
   }
