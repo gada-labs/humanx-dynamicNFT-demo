@@ -1,7 +1,8 @@
 import 'dotenv/config';
 
 const createMetadataFiles = [
-  '../metadata/create-demo1.json',
+  //'../metadata/create-demo1.json',
+  '../metadata/create-demo2.json',
 ];
 
 import Solana from './Solana';
